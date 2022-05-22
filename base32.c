@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 //
 #include "base32.h"
+#include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -12,6 +13,7 @@ uint32_t alpha_text(const uint8_t x) {
   if (x >= 'A' && x <= 'Z')
     return (x - 'A');
 
+  assert(x >= '2' && x <= '7');
   return x - '2' + 26;
 }
 
@@ -19,6 +21,7 @@ uint32_t alpha_hex(const uint8_t x) {
   if (x >= '0' && x <= '9')
     return (x - '0');
 
+  assert(x >= 'A' && x <= 'V');
   return (x - 'A' + 10);
 }
 
