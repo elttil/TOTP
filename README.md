@@ -12,7 +12,7 @@ token of said file in the clipboard.
 # Install
 
 ```shell
-git clone https://github.com/0xc1f1/totp
+git clone --recurse-submodules https://github.com/0xc1f1/totp
 cd totp
 make && make install
 ```
