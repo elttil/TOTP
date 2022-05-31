@@ -6,12 +6,12 @@
 #include "base32.h"
 #include "hotp.h"
 #include <getopt.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <math.h>
 
 #define DEFAULT_DIGIT 6
 #define DEFAULT_TIME_DURATION 30
@@ -35,7 +35,30 @@ uint64_t totp_raw(unsigned char *key, size_t len, uint64_t current_time,
 uint64_t totp(const char *key, uint64_t current_time, uint64_t digit,
               uint64_t interval) {
   size_t len = strlen(key);
-  char raw_bytes[len];
+  size_t pad_num = 0;
+
+  // Add padding if needed
+  switch (len % 8) {
+  case 2:
+    pad_num = 6;
+    break;
+  case 4:
+    pad_num = 4;
+    break;
+  case 5:
+    pad_num = 3;
+    break;
+  case 7:
+    pad_num = 2;
+    break;
+  }
+
+  char padded_key[len + pad_num];
+  memcpy(padded_key, key, len);
+  memset(padded_key + len, '=', pad_num);
+  key = padded_key;
+
+  char raw_bytes[len * 2];
   size_t real_length = base32_decode(key, raw_bytes, 0);
   return totp_raw((unsigned char *)raw_bytes, real_length, current_time, digit,
                   interval);
@@ -59,7 +82,7 @@ int main(int argc, char **argv) {
   uint64_t interval = DEFAULT_TIME_DURATION;
 
   int ch;
-  for (; - 1 != (ch = getopt(argc, argv, "t:"));) {
+  for (; - 1 != (ch = getopt(argc, argv, "t:d:i:h"));) {
     offset++;
     if (optarg)
       offset++;
@@ -84,14 +107,15 @@ int main(int argc, char **argv) {
   char *key = argv[1];
   char buffer[4096] = {0};
   if (!key) {
-    read(0, buffer, 4096);
+    int rc = read(0, buffer, 4096);
     key = buffer;
+    key[rc] = '\0';
   }
 
   uint64_t token = totp(key, cur_time, digit, interval);
-  for(size_t i = digit-1;i > 0;i--)
-	if(token < pow(10, i))
-		putchar('0');
+  for (size_t i = digit - 1; i > 0; i--)
+    if (token < pow(10, i))
+      putchar('0');
 
   printf("%ld\n", token);
   return 0;

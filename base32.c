@@ -9,19 +9,21 @@
 #include <stdio.h>
 #include <string.h>
 
-uint32_t alpha_text(const uint8_t x) {
+int alpha_text(const uint8_t x) {
   if (x >= 'A' && x <= 'Z')
     return (x - 'A');
 
-  assert(x >= '2' && x <= '7');
+  if (!(('2' <= x && x <= '7') || '\0' == x))
+    return -1;
   return x - '2' + 26;
 }
 
-uint32_t alpha_hex(const uint8_t x) {
+int alpha_hex(const uint8_t x) {
   if (x >= '0' && x <= '9')
     return (x - '0');
 
-  assert(x >= 'A' && x <= 'V');
+  if (!((x >= 'A' && x <= 'V') || '\0' == x))
+    return -1;
   return (x - 'A' + 10);
 }
 
@@ -44,7 +46,7 @@ int decode_sequence(const unsigned char *coded, unsigned char *plain,
     int octet = (block * 5) / 8;
 
     int c = (is_hex) ? (alpha_hex(coded[block])) : (alpha_text(coded[block]));
-    if (c < 0)
+    if (-1 == c)
       return octet;
 
     plain[octet] |= shift_left(c, offset);
