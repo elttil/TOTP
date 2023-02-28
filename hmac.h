@@ -8,9 +8,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include "SHA1/sha1.h"
 
 #define BLOCK_SIZE 64
-#define SHA1_LEN 20
 
 void hmac_sha1(unsigned char *message, size_t message_len, unsigned char *key,
                size_t key_len, uint8_t output[SHA1_LEN]);

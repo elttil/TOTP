@@ -4,7 +4,7 @@ LIBS=-lm
 all: totp
 
 totp: totp.c hotp.c hmac.c SHA1/sha1.c base32.c
-	$(CC) $(CFLAGS) $(LIBS) $^ -o $@
+	$(CC) $(CFLAGS) $^ $(LIBS) -o $@
 
 install:
 	mkdir -p /usr/bin
