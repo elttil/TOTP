@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2022 by Anton Kling <anton@kling.gg>
+// Copyright (C) 2022-2023 by Anton Kling <anton@kling.gg>
 //
 // SPDX-License-Identifier: 0BSD
 //
@@ -12,6 +12,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #define DEFAULT_DIGIT 6
 #define DEFAULT_TIME_DURATION 30
@@ -104,15 +105,26 @@ int main(int argc, char **argv) {
 
   argv += offset;
 
-  char *key = argv[1];
-  char buffer[4096] = {0};
-  if (!key) {
-    int rc = read(0, buffer, 4096);
-    key = buffer;
-    key[rc] = '\0';
-  }
+  char secret[4096] = {0};
 
-  uint64_t token = totp(key, cur_time, digit, interval);
+  char *path = argv[1];
+  int file_fd = 0; // Default is stdin
+    if(path) {
+        file_fd = open(path, O_RDONLY);
+        if(-1 == file_fd) {
+            perror("open");
+            return 1;
+        }
+    }
+
+  int rc = read(file_fd, secret, 4096);
+  if(-1 == rc) {
+      perror("read");
+      return 1;
+  }
+  secret[rc] = '\0';
+
+  uint64_t token = totp(secret, cur_time, digit, interval);
   for (size_t i = digit - 1; i > 0; i--)
     if (token < pow(10, i))
       putchar('0');

@@ -20,16 +20,17 @@ make && make install
 # Usage
 
 ```shell
-totp -t [UNIX time] -d [digit] -i [interval] -h(print this message) [TOTP token]
+totp -t [UNIX time] -d [digit] -i [interval] -h(print this message) [file containing the secret]
 ```
 
-Either the TOTP key can be supplied as a argument. If no argument is
-supplied then by default it will read a TOTP key from stdin.
+Either a file containing the TOTP secret key can be given as the first
+argument. If no argument is supplied then it will by default read from
+stdin.
 
 # Example(s)
 
 ```shell
-totp JBSWY3DPEHPK3PXP
+totp ./secret
 ```
 
 ```shell
