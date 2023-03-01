@@ -5,10 +5,10 @@
 //
 #ifndef HMAC_H
 #define HMAC_H
+#include "SHA1/sha1.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include "SHA1/sha1.h"
 
 #define BLOCK_SIZE 64
 

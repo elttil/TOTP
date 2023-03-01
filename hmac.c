@@ -3,11 +3,11 @@
 //
 // SPDX-License-Identifier: 0BSD
 //
+#include "hmac.h"
 #include "SHA1/sha1.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include "hmac.h"
 
 uint32_t reverse_32(uint32_t _value);
 

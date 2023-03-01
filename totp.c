@@ -5,6 +5,7 @@
 //
 #include "base32.h"
 #include "hotp.h"
+#include <fcntl.h>
 #include <getopt.h>
 #include <math.h>
 #include <stdio.h>
@@ -12,7 +13,6 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <fcntl.h>
 
 #define DEFAULT_DIGIT 6
 #define DEFAULT_TIME_DURATION 30
@@ -109,18 +109,18 @@ int main(int argc, char **argv) {
 
   char *path = argv[1];
   int file_fd = 0; // Default is stdin
-    if(path) {
-        file_fd = open(path, O_RDONLY);
-        if(-1 == file_fd) {
-            perror("open");
-            return 1;
-        }
+  if (path) {
+    file_fd = open(path, O_RDONLY);
+    if (-1 == file_fd) {
+      perror("open");
+      return 1;
     }
+  }
 
   int rc = read(file_fd, secret, 4096);
-  if(-1 == rc) {
-      perror("read");
-      return 1;
+  if (-1 == rc) {
+    perror("read");
+    return 1;
   }
   secret[rc] = '\0';
 
