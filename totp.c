@@ -89,13 +89,13 @@ int main(int argc, char **argv) {
       offset++;
     switch ((char)ch) {
     case 't':
-      cur_time = atoi(optarg);
+      cur_time = atoll(optarg);
       break;
     case 'd':
-      digit = atoi(optarg);
+      digit = atoll(optarg);
       break;
     case 'i':
-      interval = atoi(optarg);
+      interval = atoll(optarg);
       break;
     case 'h':
       usage(argv[0]);
