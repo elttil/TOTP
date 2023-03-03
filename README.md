@@ -36,3 +36,9 @@ totp ./secret
 ```shell
 echo JBSWY3DPEHPK3PXP | totp
 ```
+
+# Testing
+
+This program has been tested by the test cases for SHA1 provided by [rfc6238](https://www.rfc-editor.org/rfc/rfc6238#appendix-B).
+How the tests work can be seen in `test.sh` and the test cases can be
+seen in `test_cases.txt`.
