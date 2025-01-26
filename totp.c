@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2022-2023 by Anton Kling <anton@kling.gg>
+// Copyright (C) 2022-2025 by Anton Kling <anton@kling.gg>
 //
 // SPDX-License-Identifier: 0BSD
 //
@@ -7,6 +7,7 @@
 #include "hotp.h"
 #include <fcntl.h>
 #include <getopt.h>
+#include <inttypes.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -129,6 +130,6 @@ int main(int argc, char **argv) {
     if (token < pow(10, i))
       putchar('0');
 
-  printf("%ld\n", token);
+  printf("%" PRIu64 "\n", token);
   return 0;
 }
